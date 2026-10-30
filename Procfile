@@ -1,0 +1,1 @@
+web: opencode serve --hostname 0.0.0.0 --port $PORT
