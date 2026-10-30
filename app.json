@@ -1,0 +1,34 @@
+{
+  "name": "OpenCode Web Agent",
+  "description": "Deploy OpenCode Web UI Agent ke Heroku dengan pengamanan login dan integrasi API Key LLM.",
+  "repository": "https://github.com",
+  "logo": "https://opencode.ai",
+  "keywords": ["ai", "agent", "opencode", "docker"],
+  "stack": "container",
+  "env": {
+    "OPENCODE_WEB_USERNAME": {
+      "description": "Username untuk login ke web OpenCode kamu.",
+      "value": "admin",
+      "required": true
+    },
+    "OPENCODE_WEB_PASSWORD": {
+      "description": "Password aman untuk melindungi Agen Web OpenCode kamu dari publik.",
+      "required": true
+    },
+    "OPENCODE_ZEN_API_KEY": {
+      "description": "API Key untuk OpenCode Zen (kosongkan jika menggunakan provider lain).",
+      "required": false,
+      "value": ""
+    },
+    "OPENAI_API_KEY": {
+      "description": "API Key untuk OpenAI / ChatGPT (kosongkan jika tidak pakai).",
+      "required": false,
+      "value": ""
+    },
+    "ANTHROPIC_API_KEY": {
+      "description": "API Key untuk Anthropic Claude (kosongkan jika tidak pakai).",
+      "required": false,
+      "value": ""
+    }
+  }
+}
