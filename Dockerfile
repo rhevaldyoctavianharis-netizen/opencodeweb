@@ -1,12 +1,10 @@
 # =============================================================================
 # BASE IMAGE
-# Menggunakan Node.js versi stabil berbasis Debian
 # =============================================================================
 FROM node:22-bookworm-slim
 
 # =============================================================================
 # INSTALASI DEPENDENSI SISTEM
-# git dan ripgrep wajib ada agar OpenCode bisa membaca dan mencari file
 # =============================================================================
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -17,13 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # =============================================================================
 # INSTALASI OPENCODE CLI
-# Memasang OpenCode secara global via npm agar perintah 'opencode' dikenali
 # =============================================================================
 RUN npm install -g opencode-ai@latest && npm cache clean --force
 
 # =============================================================================
 # SETUP USER & WORKSPACE
-# Heroku dan praktik keamanan Docker menyarankan untuk tidak menggunakan root
 # =============================================================================
 RUN mkdir -p /home/opencode/workspace && \
     useradd -m -d /home/opencode opencode && \
@@ -33,9 +29,13 @@ USER opencode
 WORKDIR /home/opencode/workspace
 
 # =============================================================================
-# MENJALANKAN APLIKASI
-# --no-open: Mencegah OpenCode mencoba membuka browser (yang bikin crash)
-# --hostname: Menerima koneksi dari luar container
-# ${PORT:-4096}: Menggunakan port dinamis Heroku, fallback ke 4096
+# KONFIGURASI PENTING: Paksa UI disajikan secara lokal
+# Arahkan ke folder dist UI yang disertakan dalam paket npm.
+# Path ini adalah lokasi umum; jika gagal, build akan error dan kita tahu.
 # =============================================================================
-CMD ["sh", "-c", "opencode web --no-open --hostname 0.0.0.0 --port ${PORT:-4096}"]
+ENV OPENCODE_WEB_URL=/usr/local/lib/node_modules/opencode-ai/node_modules/opencode-web/dist
+
+# =============================================================================
+# MENJALANKAN APLIKASI
+# =============================================================================
+CMD ["sh", "-c", "opencode web --hostname 0.0.0.0 --port ${PORT:-4096}"]
